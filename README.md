@@ -1,2 +1,2 @@
-# X-ray backscattering Laue simulator
+# X-ray Laue backscattering simulator
 準備中
