@@ -1,2 +1,2 @@
-# X-ray_backscattering_laue_simulator
- X-ray laue simulator by JavaScript
+# X-ray backscattering Laue simulator
+準備中
