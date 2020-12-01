@@ -1,0 +1,194 @@
+<head>
+<title >X-ray Laue Backscattering Pattern Simulator</title>
+<link rel="stylesheet" type="text/css" href="./common.css">
+<script type="text/javascript" src="./hrc_detector_map.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+<meta charset="UTF-8">
+</head>
+<body onload="init_draw()">
+    <div class="fullbox">
+    <table class="header_table">
+        <tr>
+            <td ><font class="mytitle">X-ray Laue Backscattering Pattern Simulator</font> <font color="white">ver</font> <font color="white" id="verNum"></font></td>
+            <!--td class="menu_item"><a href="https://sites.google.com/view/hrc-web-tools/web-tools/laue_simulator" target="_blank" class="headerLink">Tutorial</a></td>
+            <td class="menu_item"><a href="https://sites.google.com/view/hrc-web-tools/web-tools/laue_simulator/laue_sim_tutorial_jp" target="_blank" class="headerLink">Tutorial (JP)</a></td>
+            <td class="menu_item"><a href="https://github.com/taro-nakajima/HRC_Idp_plot" target="_blank" class="headerLink">Suppl. tool</a></td-->
+            <td class="dummy_text">-----</td>
+        </tr>
+    </table>
+    </div>
+<br />
+
+<div class="mainbody">
+<div class="dummy_space1" id="sec_DetMap">-</div>
+<div class="dummy_space2">-</div>
+    
+<table>
+    <tr>
+        <td>
+            <!-- for panel 1 "Setting"--------------------------------------------->
+            <div class="section_02">Crystal structure </div>
+            <table>
+                <tr>
+                    <td valign="top">
+                        <b>Lattice constants</b><br />
+                        <table>
+                            <tr>
+                                <td>
+                                    <i>a</i> = <input size="5" id="a" value="5"> &Aring;,<br />
+                                    <i>b</i> = <input size="5" id="b" value="5"> &Aring;,<br />
+                                    <i>c</i> = <input size="5" id="c" value="5"> &Aring;,            
+                                </td>
+                                <td width="20">
+                                    <!-- space -->
+                                </td>
+                                <td>
+                                    <i>&alpha;</i> = <input size="5" id="alpha" value="90"> deg. <br /> 
+                                    <i>&beta;</i> = <input size="5" id="beta" value="90"> deg.<br /> 
+                                    <i>&gamma;</i> = <input size="5" id="gamma" value="90"> deg. 
+                                    <br />                     
+                                </td>
+                            </tr>
+                        </table>
+                        <input type="button" value="   Set lattice  " onclick="draw()"/><br />
+                    </td>
+                    <td width="50">
+                        <!-- space -->
+                    </td>
+                    <td valign="top">
+                        <b>Reflection condition</b><br />
+                        <select id="RefCon" onchange="set_RefCon_and_draw()">
+                            <option value="none" selected>none</option>
+                            <option value="H+K=2n">H+K=2n</option>
+                            <option value="H+L=2n">H+L=2n</option>
+                            <option value="K+L=2n">K+L=2n</option>
+                            <option value="H+K+L=2n">H+K+L=2n</option>
+                            <option value="H,K,L all even or all odd">H,K,L all even or all odd</option>
+                            <option value="-H+K+L=3n">-H+K+L=3n</option>
+                        </select><br />
+                        <br />
+            
+                    </td>
+                    <td width="50">
+                        <!-- space -->
+                    </td>
+                    <td>
+                        <b>Orientation </b><br />
+                        <b><i>u</i></b> = (<input size="6" id="u1" value="1">,<input size="6" id="u2" value="0">,<input size="6" id="u3" value="0">)<br />
+                        <b><i>v</i></b> = (<input size="6" id="v1" value="0">,<input size="6" id="v2" value="1">,<input size="6" id="v3" value="0">)<br />
+                        (<b><i>u</i></b>: diraction parallel to incident beam. <br />
+                        <b><i>v</i></b>: another direction in the beam horizontal plane.) <br />
+                        <input type="button" value="   Set orientation  " onclick="draw()"/><br />
+                        <br />
+            
+                    </td>
+                </tr>
+            </table>
+
+
+
+            <div class="section_02">Incident X-ray Beam </div>
+            <table>
+                <tr>
+                    <td>
+                        <b><i>&lambda;</i> <sub>min</sub></b><br />
+                    </td>
+                    <td>
+                        <input type="range" value="0.45" min="0.1" max="1" step="0.01" id="lambda_min" oninput="lambda_adjust_and_draw()">
+                    </td>
+                    <td>
+                        <input size="5" value="0.45" id="lambda_min_disp"> &Aring;
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+
+            <!-- for panel 2 "Simulation"--------------------------------------------->
+            <div class="section_02">Load observed Laue pattern </div>
+            <table>
+                <tr>
+                    <td>
+                        <input type="file" onchange="getFile(this.files)"><br />
+                    </td>
+                    <td>
+                        <input type="button" value="   Remove file  " onclick="removeFile()"><br />
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <div class="section_02">Simulation </div>
+            <table>
+                <tr>
+                    <td valign="top">
+                        <b>Sample rotation</b><br />
+                        <input size="5" id="rot_x_deg" value="1"> deg. <input type="button" value="  rotate x+  " id="rot_x_plus" onclick="rot_and_draw(this.id)" /><input type="button" value="  rotate x-  " id="rot_x_minus" onclick="rot_and_draw(this.id)" /><br />
+                        <input size="5" id="rot_y_deg" value="1"> deg. <input type="button" value="  rotate y+  " id="rot_y_plus" onclick="rot_and_draw(this.id)" /><input type="button" value="  rotate y-  " id="rot_y_minus" onclick="rot_and_draw(this.id)" /><br />
+                        <input size="5" id="rot_z_deg" value="1"> deg. <input type="button" value="  rotate z+  " id="rot_z_plus" onclick="rot_and_draw(this.id)" /><input type="button" value="  rotate z-  " id="rot_z_minus" onclick="rot_and_draw(this.id)" /><br />
+                        <br />           
+                    </td>
+                    <td width="20"> 
+                        <!-- space -->
+                    </td>
+                    <td valign="top"> 
+                        <b>Detector</b><br>
+                        Sample-detector distance <input size="5" id="Lsd" value="40"> mm.<br />
+                        Height of the detector <input size="5" id="DetHeight" value="80"> mm.<br />
+                        Offset of the center position (<input size="5" id="X0_ofst" value="0">,<input size="5" id="Y0_ofst" value="0">) pixels.<br />
+                        <input type="button" value="Set" onclick="set_Origin_and_draw()"><br />
+                    </td>
+                    <td width="20"> 
+                        <!-- space -->
+                    </td>
+                    <td valign="top"> 
+                        <b>Target reflection </b><br />
+                        (<i>H</i><sub>t</sub>,<i>K</i><sub>t</sub>,<i>L</i><sub>t</sub>)=(<input size="5" id="Ht" value="0">,<input size="5" id="Kt" value="0">,<input size="5" id="Lt" value="0">)
+                        <input type="button" value="Set" onclick="draw_DetMap()"><br />
+            
+            
+                    </td>
+                </tr>
+            </table>
+
+
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="section_02">Detector map </div>
+            <canvas id="CanvasDetMap" class="box"></canvas><br />
+            <br />
+            <div class="section_02">Sample orientation viewer</div>
+            <canvas id="OrientationViewer" class="box"></canvas><br />
+            <font color="red"><i><b>a</b></i>* &rarr;</font>, <font color="green"><i><b>b</b></i>* &rarr;</font>, <font color="blue"><i><b>c</b></i>* &rarr;</font>, <font color="orange">Incident X-ray &rarr;</font><br />
+            <b>Camera angle </b>
+            <table>
+                <tr>
+                    <td>
+                        Vertical: 
+                    </td>
+                    <td>
+                        Top view<input type="range" value="90" min="0" max="90" step="1" id="cam_theta" oninput="draw_OriViewer()">Side view
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Horizontal: 
+                    </td>
+                    <td>
+                        <input type="range" value="0" min="-60" max="90" step="1" id="cam_phi" oninput="draw_OriViewer()">
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+        </td>
+    </tr>
+</table>
+<br />
+
+<div class="footer"> Version <font id="verNum2"></font> by D. Kawana and <a href="https://nakajima.issp.u-tokyo.ac.jp" target="_blank">T. Nakajima</a> in ISSP-NSL, 2020.</div>
+</div> <!--end of mainbody-->
+</body>
