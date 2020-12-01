@@ -514,7 +514,7 @@ function draw_OriViewer(){
     directionalLight.position.set(150, 240, -500);
     scene.add(directionalLight);
   
-    const light = new THREE.AmbientLight(0xffffff, 1.0);
+    const light = new THREE.AmbientLight(0xa0a0a0, 1.0);
     scene.add(light);  
     // ポイント光源
   //  const pointLight = new THREE.PointLight(0xffffff, 2, 1000);
