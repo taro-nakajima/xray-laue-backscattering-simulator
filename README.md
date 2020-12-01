@@ -1,5 +1,9 @@
 # X-ray Laue backscattering simulator
 
+X線ラウエのシミュレーションソフトです。下記のURLからアクセスできます。
+
+https://nakajima.issp.u-tokyo.ac.jp/tools/xray_laue_sim/
+
 使い方の説明は準備中です。
 
 ## Offlineでの動かし方
