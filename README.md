@@ -4,7 +4,9 @@ X線ラウエのシミュレーションソフトです。下記のURLからア�
 
 https://nakajima.issp.u-tokyo.ac.jp/tools/xray_laue_sim/
 
-使い方の説明は準備中です。
+使い方の説明は下記のWeb pageにあります。
+
+https://sites.google.com/view/t-nakajima-group/tools/xray_laue_simulator
 
 ## Offlineでの動かし方
 まず、このrepositoryをダウンロードします。（cloneでも、上の「↓Code」ボタンからダウンロードしても良いです)。
