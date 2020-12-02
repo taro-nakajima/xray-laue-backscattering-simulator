@@ -7,7 +7,7 @@ https://nakajima.issp.u-tokyo.ac.jp/tools/xray_laue_sim/
 使い方の説明は準備中です。
 
 ## Offlineでの動かし方
-まず、このrepositoryをダウンロードします。（cloneでも、直接ダウンロードしても良いです)。
+まず、このrepositoryをダウンロードします。（cloneでも、上の「↓Code」ボタンからダウンロードしても良いです)。
 
 https://threejs.org/ からthree.js-master.zipをダウンロードしてきて、同じフォルダに解凍します。
 
