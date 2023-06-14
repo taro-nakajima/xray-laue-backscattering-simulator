@@ -1,6 +1,6 @@
 //JavaScript code for simulation of X-ray Laue backscattering
 
-var version = "0.1";
+var version = "1.0";
 
 // dimensions of the canvas object
 var scaleX=1200;
@@ -251,11 +251,11 @@ function check_ReflectionCondition(RefCon,H,K,L){
 
 function draw_DetMap(){
 
-    var canvas = document.getElementById('CanvasDetMap');
+    let canvas = document.getElementById('CanvasDetMap');
     canvas.width=scaleX;
     canvas.height=scaleY;
 
-    var context = canvas.getContext('2d');
+    let context = canvas.getContext('2d');
 
     //refresh
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -327,6 +327,10 @@ function draw_DetMap(){
     //minus signs are necessary to convert Q=kf-ki to Q=ki-kf.
     drawBraggReflection(context,Ht,Kt,Lt,isTargetHKL,showHKL);
 
+    window.URL.revokeObjectURL(document.getElementById('DetMap_download').href);
+    canvas.toBlob((blob)=>{
+        document.getElementById('DetMap_download').href=window.URL.createObjectURL(blob);
+    });
 
 }
 
