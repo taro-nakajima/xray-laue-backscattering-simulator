@@ -2,7 +2,7 @@
 
 X線ラウエのシミュレーションソフトです。下記のURLからアクセスできます。
 
-[https://nakajima.issp.u-tokyo.ac.jp/tools/xray_laue_sim/](https://taro-nakajima.github.io/xray-laue-backscattering-simulator/)
+https://taro-nakajima.github.io/xray-laue-backscattering-simulator/
 
 使い方の説明は下記のWeb pageにあります。
 
