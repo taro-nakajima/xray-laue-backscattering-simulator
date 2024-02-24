@@ -1,15 +1,15 @@
 //JavaScript code for simulation of X-ray Laue backscattering
 
-var version = "1.0";
+const version = "1.1";
 
 // dimensions of the canvas object
-var scaleX=1200;
-var scaleY=400;
+let scaleX=1200;
+let scaleY=400;
 
-var X0=scaleX/2;
-var Y0=scaleY/2;
-var X0_ofst=0;
-var Y0_ofst=0;
+let X0=scaleX/2;
+let Y0=scaleY/2;
+let X0_ofst=0;
+let Y0_ofst=0;
 
 
 //parameters for the appearance of the simulation
@@ -24,48 +24,48 @@ const gridcolor="rgb(250, 100, 0)"
 const ref_linewidth=1;
 
 //variables for calculating Laue diffraction patterns.-------------------
-var u = new Array(3); // indices, pallarel to the incident beam
-var v = new Array(3); // indices, another direction in the horizontal plane including the incidnet beam
+let u = new Array(3); // indices, pallarel to the incident beam
+let v = new Array(3); // indices, another direction in the horizontal plane including the incidnet beam
 
-var ux = new Array(3);
-var vx = new Array(3);
+let ux = new Array(3);
+let vx = new Array(3);
 
-var Rot0 = new Array(3);
-var Rot1 = new Array(3);
-var Rot2 = new Array(3);
-var Rot =[Rot0, Rot1, Rot2];    // 3x3 rotation matrix
+let Rot0 = new Array(3);
+let Rot1 = new Array(3);
+let Rot2 = new Array(3);
+let Rot =[Rot0, Rot1, Rot2];    // 3x3 rotation matrix
 
-var a_unit = new Array(3);  // unit vector of primitive translation vectors
-var b_unit = new Array(3);
-var c_unit = new Array(3);
+let a_unit = new Array(3);  // unit vector of primitive translation vectors
+let b_unit = new Array(3);
+let c_unit = new Array(3);
 
-var a_star = new Array(3);  // reciprocal lattice vectors
-var b_star = new Array(3);
-var c_star = new Array(3);
+let a_star = new Array(3);  // reciprocal lattice vectors
+let b_star = new Array(3);
+let c_star = new Array(3);
 
-var as_len;
-var bs_len;
-var cs_len;
+let as_len;
+let bs_len;
+let cs_len;
 
-var RefCon = '';
+let RefCon = '';
 
-var Hmax;
-var Kmax;
-var Lmax;
+let Hmax;
+let Kmax;
+let Lmax;
 
-var lambda_min=0.4;
+let lambda_min=0.4;
 
-var phih;
-var phiv;
-var lambda;             // wavelength 
+let phih;
+let phiv;
+let lambda;             // wavelength 
 
-var Omega=0;
+let Omega=0;
 
 //parameters regarding the detector banks
-var Lsd = 40;   // Distance between the sample and detector (mm)
-var DetHeight = 80; //height of the detector (mm)
-var HD = 20;    // height of center of PSD from incident beam (mm)
-var LD = 2800;  // length of PSD (mm)
+let Lsd = 40;   // Distance between the sample and detector (mm)
+let DetHeight = 80; //height of the detector (mm)
+//let HD = 20;    // height of center of PSD from incident beam (mm)
+//let LD = 2800;  // length of PSD (mm)
 
 //variables for 3D orientation viewer
 const arrow_scale = 120;        //arrows for a*, b* and c*: convert A-1 to pixel.
@@ -75,9 +75,9 @@ const scale3D = 5;   // convert mm to pixel.
 const DetBankThickness = 50; //pixel
 
 //variable for loading observed Laue image.
-var imageLoaded=false;
-var imageURL;
-var image = new Image();
+let imageLoaded=false;
+let imageURL;
+let image = new Image();
 
 function init_draw(){
     document.getElementById("verNum").innerHTML=version;
@@ -205,7 +205,7 @@ function set_ReflectionCondition(){
 }
 
 function check_ReflectionCondition(RefCon,H,K,L){
-    var retstr=false;
+    let retstr=false;
 
     switch(RefCon){
         case 'none':
@@ -298,9 +298,9 @@ function draw_DetMap(){
     let Ghkl=new Array(3);
     let isTargetHKL=false;
     let showHKL=false;
-    for (var H=-Hmax;H<=Hmax;H+=1){
-        for (var K=-Kmax;K<=Kmax;K+=1){
-            for (var L=-Lmax;L<=Lmax;L+=1){
+    for (let H=-Hmax;H<=Hmax;H+=1){
+        for (let K=-Kmax;K<=Kmax;K+=1){
+            for (let L=-Lmax;L<=Lmax;L+=1){
 
                 if(check_ReflectionCondition(RefCon,H,K,L)==false){
                     // Reflection condition is not satisfied or H=K=L=0.
@@ -483,11 +483,11 @@ function draw_OriViewer(){
     
     //draw a*, b*, c*
     //a*
-    var dir = new THREE.Vector3( a_star[0],a_star[2], -a_star[1] );
-    var origin = new THREE.Vector3( 0, 0, 0 );
-    var arrow_len = dir.length()*arrow_scale;
-    var hex = 0xff0000;
-    var arrowHelper = new THREE.ArrowHelper( dir.normalize(), origin, arrow_len, hex ,arrow_HeadLen,arrow_HeadWidth);
+    let dir = new THREE.Vector3( a_star[0],a_star[2], -a_star[1] );
+    let origin = new THREE.Vector3( 0, 0, 0 );
+    let arrow_len = dir.length()*arrow_scale;
+    let hex = 0xff0000;
+    let arrowHelper = new THREE.ArrowHelper( dir.normalize(), origin, arrow_len, hex ,arrow_HeadLen,arrow_HeadWidth);
     scene.add(arrowHelper);
   
     //b*
@@ -508,7 +508,7 @@ function draw_OriViewer(){
     dir = new THREE.Vector3( 1,0, 0 );
     arrow_len = dir.length()*arrow_scale;
     hex = 0xff9900;
-    var origin2 = new THREE.Vector3( -Lsd*scale3D, 0, 0 );
+    let origin2 = new THREE.Vector3( -Lsd*scale3D, 0, 0 );
     arrowHelper = new THREE.ArrowHelper( dir.normalize(), origin2,Lsd*scale3D, hex ,arrow_HeadLen,arrow_HeadWidth);
     scene.add(arrowHelper);
 
