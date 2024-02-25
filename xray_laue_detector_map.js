@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 //JavaScript code for simulation of X-ray Laue backscattering
 
 const version = "1.1";
@@ -13,11 +15,9 @@ let Y0_ofst=0;
 
 
 //parameters for the appearance of the simulation
-const decimal_digit=1000;     // decimal digit for UBmatrix
 const radius=5;       // radius of circles showing refletions in the simulation.
 const radius_tgt=8;     //// radius of a circle showing a target refletions in the simulation.
 const txt_ofst1=radius+10;   //offset along Y direction for indices shown near each reflection.
-const txt_ofst2=3;   //offset along X direction for detector number shown bottom.
 const fundamental_color="rgb(0, 0, 250)";
 const DetMapBGColor="rgb(220, 220, 220)";
 const gridcolor="rgb(250, 100, 0)"
@@ -55,8 +55,6 @@ let Lmax;
 
 let lambda_min=0.4;
 
-let phih;
-let phiv;
 let lambda;             // wavelength 
 
 let Omega=0;
@@ -64,8 +62,6 @@ let Omega=0;
 //parameters regarding the detector banks
 let Lsd = 40;   // Distance between the sample and detector (mm)
 let DetHeight = 80; //height of the detector (mm)
-//let HD = 20;    // height of center of PSD from incident beam (mm)
-//let LD = 2800;  // length of PSD (mm)
 
 //variables for 3D orientation viewer
 const arrow_scale = 120;        //arrows for a*, b* and c*: convert A-1 to pixel.
@@ -78,6 +74,79 @@ const DetBankThickness = 50; //pixel
 let imageLoaded=false;
 let imageURL;
 let image = new Image();
+
+window.addEventListener('load', () => {
+    init_draw();
+
+    document.getElementById('set_lattice_button').addEventListener('click', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+        draw();
+    });
+
+    document.getElementById('RefCon').addEventListener('change', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+        set_RefCon_and_draw();
+    });
+
+    document.getElementById('set_orientation_button').addEventListener('click', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+        draw();
+    });
+
+    document.getElementById('lambda_min').addEventListener('input', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+        lambda_adjust_and_draw();
+    });
+
+    const laue_pic_input = document.getElementById('laue_pic_file');
+    laue_pic_input.addEventListener('change', (evt) => {       // this process will be executed when the element "laue_pic_file" has been changed.
+        let input = evt.target;
+        if (input.files.length == 0) {
+            console.log('No file selected');
+            return;
+        }
+        const file = input.files[0];
+        getFile(file);
+    });
+
+    document.getElementById('file_remove_button').addEventListener('click', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+        removeFile();
+    });
+
+    document.getElementById('rot_x_plus').addEventListener('click', (evt) => {    
+        rot_and_draw('rot_x_plus');
+    });
+
+    document.getElementById('rot_y_plus').addEventListener('click', (evt) => {    
+        rot_and_draw('rot_y_plus');
+    });
+
+    document.getElementById('rot_z_plus').addEventListener('click', (evt) => {    
+        rot_and_draw('rot_z_plus');
+    });
+
+    document.getElementById('rot_x_minus').addEventListener('click', (evt) => {   
+        rot_and_draw('rot_x_minus');
+    });
+
+    document.getElementById('rot_y_minus').addEventListener('click', (evt) => {   
+        rot_and_draw('rot_y_minus');
+    });
+
+    document.getElementById('rot_z_minus').addEventListener('click', (evt) => {   
+        rot_and_draw('rot_z_minus');
+    });
+
+    document.getElementById('set_origin_button').addEventListener('click', (evt) => {   
+        set_Origin_and_draw();
+    });
+    
+    document.getElementById('cam_theta').addEventListener('input', (evt) => {   
+        draw_OriViewer();
+    });
+
+    document.getElementById('cam_phi').addEventListener('input', (evt) => {   
+        draw_OriViewer();
+    });
+
+
+});
 
 function init_draw(){
     document.getElementById("verNum").innerHTML=version;
@@ -118,15 +187,6 @@ function set_Origin_and_draw(){
     draw_DetMap();
 }
 
-function omegaRot_and_draw(){
-    let targetOmega=Number(document.getElementById("targetOmega").value);
-    const deltaOmega = (targetOmega-Omega)/180.0*Math.PI;
-    xyz_rotation(2,-deltaOmega);    //"2" means rotation about the z axis. a minus sign is necessary because directions of omega- and z-rotations are opposite to each other.
-    draw_DetMap();
-    draw_OriViewer();
-    Omega=targetOmega;
-    document.getElementById("currentOmega_disp").innerHTML=String(Omega);
-}
 
 function set_Lattice(){
 
@@ -530,9 +590,9 @@ function draw_OriViewer(){
   
   }
 
-function getFile(e){
+function getFile(file){
     let reader = new FileReader();
-    reader.readAsDataURL(e[0]);
+    reader.readAsDataURL(file);
     reader.onload = function() {
         imageLoaded=true;
         image.src = reader.result;

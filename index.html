@@ -11,11 +11,17 @@
 </script>
 <title >X-ray Laue Backscattering Pattern Simulator</title>
 <link rel="stylesheet" type="text/css" href="./common.css">
-<script type="text/javascript" src="./xray_laue_detector_map.js?20230614"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js"></script>
+<script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.161.0/build/three.module.js"
+      }
+    }
+  </script>
+<script type="module" src="./xray_laue_detector_map.js?202402252"></script>
 <meta charset="UTF-8">
 </head>
-<body onload="init_draw()">
+<body>
     <div class="fullbox">
     <table class="header_table">
         <tr>
@@ -59,14 +65,14 @@
                                 </td>
                             </tr>
                         </table>
-                        <input type="button" value="   Set lattice  " onclick="draw()"/><br />
+                        <input type="button" value="   Set lattice  " id="set_lattice_button"/><br />
                     </td>
                     <td width="50">
                         <!-- space -->
                     </td>
                     <td valign="top">
                         <b>Reflection condition</b><br />
-                        <select id="RefCon" onchange="set_RefCon_and_draw()">
+                        <select id="RefCon">
                             <option value="none" selected>none</option>
                             <option value="H+K=2n">H+K=2n</option>
                             <option value="H+L=2n">H+L=2n</option>
@@ -87,7 +93,7 @@
                         <b><i>v</i></b> = (<input size="6" id="v1" value="0">,<input size="6" id="v2" value="1">,<input size="6" id="v3" value="0">)<br />
                         (<b><i>u</i></b>: diraction parallel to the incident beam. <br />
                         <b><i>v</i></b>: another direction in the horizontal plane.) <br />
-                        <input type="button" value="   Set orientation  " onclick="draw()"/><br />
+                        <input type="button" value="   Set orientation  " id="set_orientation_button"/><br />
                         <br />
             
                     </td>
@@ -103,7 +109,7 @@
                         <b><i>&lambda;</i> <sub>min</sub></b><br />
                     </td>
                     <td>
-                        <input type="range" value="0.7" min="0.1" max="1" step="0.01" id="lambda_min" oninput="lambda_adjust_and_draw()">
+                        <input type="range" value="0.7" min="0.1" max="1" step="0.01" id="lambda_min" >
                     </td>
                     <td>
                         <input size="5" value="0.45" id="lambda_min_disp"> &Aring;
@@ -118,10 +124,10 @@
             <table>
                 <tr>
                     <td>
-                        <input type="file" onchange="getFile(this.files)"><br />
+                        <input type="file" id="laue_pic_file"><br />
                     </td>
                     <td>
-                        <input type="button" value="   Remove file  " onclick="removeFile()"><br />
+                        <input type="button" value="   Remove file  " id="file_remove_button"><br />
                     </td>
                 </tr>
             </table>
@@ -132,9 +138,9 @@
                 <tr>
                     <td valign="top">
                         <b>Sample rotation</b><br />
-                        <input size="5" id="rot_x_deg" value="1"> deg. <input type="button" value="  rotate x+  " id="rot_x_plus" onclick="rot_and_draw(this.id)" /><input type="button" value="  rotate x-  " id="rot_x_minus" onclick="rot_and_draw(this.id)" /><br />
-                        <input size="5" id="rot_y_deg" value="1"> deg. <input type="button" value="  rotate y+  " id="rot_y_plus" onclick="rot_and_draw(this.id)" /><input type="button" value="  rotate y-  " id="rot_y_minus" onclick="rot_and_draw(this.id)" /><br />
-                        <input size="5" id="rot_z_deg" value="1"> deg. <input type="button" value="  rotate z+  " id="rot_z_plus" onclick="rot_and_draw(this.id)" /><input type="button" value="  rotate z-  " id="rot_z_minus" onclick="rot_and_draw(this.id)" /><br />
+                        <input size="5" id="rot_x_deg" value="1"> deg. <input type="button" value="  rotate x+  " id="rot_x_plus"  /><input type="button" value="  rotate x-  " id="rot_x_minus"  /><br />
+                        <input size="5" id="rot_y_deg" value="1"> deg. <input type="button" value="  rotate y+  " id="rot_y_plus"  /><input type="button" value="  rotate y-  " id="rot_y_minus"  /><br />
+                        <input size="5" id="rot_z_deg" value="1"> deg. <input type="button" value="  rotate z+  " id="rot_z_plus"  /><input type="button" value="  rotate z-  " id="rot_z_minus"  /><br />
                         <br />           
                     </td>
                     <td width="20"> 
@@ -145,7 +151,7 @@
                         Sample-detector distance <input size="5" id="Lsd" value="40"> mm.<br />
                         Vertical length of the detection area <input size="5" id="DetHeight" value="80"> mm.<br />
                         Offset of the center position (<input size="5" id="X0_ofst" value="0">,<input size="5" id="Y0_ofst" value="0">) pixels.<br />
-                        <input type="button" value="Set" onclick="set_Origin_and_draw()"><br />
+                        <input type="button" value="Set" id="set_origin_button"><br />
                     </td>
                     <td width="20"> 
                         <!-- space -->
@@ -153,7 +159,7 @@
                     <td valign="top"> 
                         <b>Target reflection </b><br />
                         (<i>H</i><sub>t</sub>,<i>K</i><sub>t</sub>,<i>L</i><sub>t</sub>)=(<input size="5" id="Ht" value="0">,<input size="5" id="Kt" value="0">,<input size="5" id="Lt" value="0">)
-                        <input type="button" value="Set" onclick="draw_DetMap()"><br />
+                        <input type="button" value="Set" id="set_target_ref_button"><br />
             
             
                     </td>
@@ -181,7 +187,7 @@
                         Vertical: 
                     </td>
                     <td>
-                        Top view<input type="range" value="90" min="0" max="90" step="1" id="cam_theta" oninput="draw_OriViewer()">Side view
+                        Top view<input type="range" value="90" min="0" max="90" step="1" id="cam_theta">Side view
                     </td>
                 </tr>
                 <tr>
@@ -189,7 +195,7 @@
                         Horizontal: 
                     </td>
                     <td>
-                        <input type="range" value="0" min="-60" max="90" step="1" id="cam_phi" oninput="draw_OriViewer()">
+                        <input type="range" value="0" min="-60" max="90" step="1" id="cam_phi" >
                     </td>
                 </tr>
             </table>
@@ -200,7 +206,7 @@
 </table>
 <br />
 
-<div class="footer"> Version <font id="verNum2"></font> by D. Kawana and <a href="https://nakajima.issp.u-tokyo.ac.jp" target="_blank">T. Nakajima</a> in ISSP-NSL, 2020.</div>
+<div class="footer"> Version <font id="verNum2"></font> by D. Kawana and <a href="https://nakajima.issp.u-tokyo.ac.jp" target="_blank">T. Nakajima</a> in ISSP-NSL, 2024.</div>
 </div> <!--end of mainbody-->
 </body>
 </html>
