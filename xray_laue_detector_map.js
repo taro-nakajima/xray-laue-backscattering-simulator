@@ -90,6 +90,10 @@ window.addEventListener('load', () => {
         draw();
     });
 
+    document.getElementById('set_target_ref_button').addEventListener('click', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+        draw();
+    });
+
     document.getElementById('lambda_min').addEventListener('input', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
         lambda_adjust_and_draw();
     });
