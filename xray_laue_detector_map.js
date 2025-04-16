@@ -582,19 +582,12 @@ function draw_OriViewer(){
     arrowHelper = new THREE.ArrowHelper( dir.normalize(), origin2,Lsd*scale3D, hex ,arrow_HeadLen,arrow_HeadWidth);
     scene.add(arrowHelper);
 
-    
-    // 平行光源
     const directionalLight = new THREE.DirectionalLight(0xffffff);
     directionalLight.position.set(150, 240, -500);
     scene.add(directionalLight);
   
     const light = new THREE.AmbientLight(0xa0a0a0, 1.0);
     scene.add(light);  
-    // ポイント光源
-  //  const pointLight = new THREE.PointLight(0xffffff, 2, 1000);
-  //  scene.add(pointLight);
-  //  const pointLightHelper = new THREE.PointLightHelper(pointLight, 3);
-  //  scene.add(pointLightHelper);
   
     renderer.render(scene, camera);
   
