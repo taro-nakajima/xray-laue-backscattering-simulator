@@ -361,9 +361,9 @@ function draw_DetMap(){
     context.lineWidth= ref_linewidth;
     context.font = "10px sans-serif";
 
-    Hmax = Math.floor(Qmax/as_len);
-    Kmax = Math.floor(Qmax/bs_len);
-    Lmax = Math.floor(Qmax/cs_len);
+    Hmax = Math.floor(Qmax/as_len*2.0);
+    Kmax = Math.floor(Qmax/bs_len*2.0);
+    Lmax = Math.floor(Qmax/cs_len*2.0);
 
     let Ghkl=new Array(3);
     let isTargetHKL=false;
@@ -421,7 +421,7 @@ function drawBraggReflection(context1,H1,K1,L1,isTargetHKL1,showHKL1){
         let ki = -0.5*G_sq/Ghkl[0]; // Ki >0
         lambda = 2.0*Math.PI/ki;    // Angstrome
 
-        if(lambda>lambda_min && G_sq > 0){   // lambda_min=2PI/sqrt(Ei_max/2.072), the case that H=K=L=0 is avoided by the condition of  G_sq > 0.
+        if(lambda>lambda_min && G_sq > 0 && G_sq < Qmax**2.0){   // lambda_min=2PI/sqrt(Ei_max/2.072), the case that H=K=L=0 is avoided by the condition of  G_sq > 0.
             let kf=new Array(3);
             kf[0]=Ghkl[0]+ki;
             kf[1]=Ghkl[1];
