@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 //JavaScript code for simulation of X-ray Laue backscattering
 
-const version = "1.1";
+const version = "1.2";
 
 // dimensions of the canvas object
 let scaleX=1200;
@@ -54,6 +54,7 @@ let Kmax;
 let Lmax;
 
 let lambda_min=0.4;
+let Qmax = 4.0*Math.PI/lambda_min;
 
 let lambda;             // wavelength 
 
@@ -78,23 +79,27 @@ let image = new Image();
 window.addEventListener('load', () => {
     init_draw();
 
-    document.getElementById('set_lattice_button').addEventListener('click', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+    document.getElementById('set_lattice_button').addEventListener('click', (evt) => {    
         draw();
     });
 
-    document.getElementById('RefCon').addEventListener('change', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+    document.getElementById('RefCon').addEventListener('change', (evt) => {   
         set_RefCon_and_draw();
     });
 
-    document.getElementById('set_orientation_button').addEventListener('click', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+    document.getElementById('set_orientation_button').addEventListener('click', (evt) => {   
         draw();
     });
 
-    document.getElementById('set_target_ref_button').addEventListener('click', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+    document.getElementById('set_target_ref_button').addEventListener('click', (evt) => {   
         draw();
     });
 
-    document.getElementById('lambda_min').addEventListener('input', (evt) => {    // button to execute the calculation of the list of nuclear structure factors
+    document.getElementById('lambda_min').addEventListener('input', (evt) => {     
+        lambda_adjust_and_draw();
+    });
+
+    document.getElementById('Q_max').addEventListener('input', (evt) => {    
         lambda_adjust_and_draw();
     });
 
@@ -180,6 +185,8 @@ function rot_and_draw(rot_ax_dir) {
 function lambda_adjust_and_draw(){
     document.getElementById("lambda_min_disp").value = document.getElementById("lambda_min").value;
     lambda_min = Number(document.getElementById("lambda_min").value);
+    document.getElementById("Q_max_disp").value = document.getElementById("Q_max").value;
+    Qmax = Number(document.getElementById("Q_max").value);
     draw_DetMap();
 }
 
@@ -354,7 +361,6 @@ function draw_DetMap(){
     context.lineWidth= ref_linewidth;
     context.font = "10px sans-serif";
 
-    let Qmax = 4.0*Math.PI/lambda_min;
     Hmax = Math.floor(Qmax/as_len);
     Kmax = Math.floor(Qmax/bs_len);
     Lmax = Math.floor(Qmax/cs_len);

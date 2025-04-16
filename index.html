@@ -19,7 +19,7 @@
       }
     }
   </script>
-<script type="module" src="./xray_laue_detector_map.js?202402253"></script>
+<script type="module" src="./xray_laue_detector_map.js?20250416"></script>
 <meta charset="UTF-8">
 </head>
 <body>
@@ -103,17 +103,28 @@
 
 
 
-            <div class="section_02">Incident X-ray Beam </div>
+            <div class="section_02"> X-ray wavelength and Q-range </div>
             <table>
                 <tr>
                     <td>
-                        <b><i>&lambda;</i> <sub>min</sub></b><br />
+                        <b><i>&lambda;</i><sub>min</sub></b><br />
                     </td>
                     <td>
                         <input type="range" value="0.7" min="0.1" max="1" step="0.01" id="lambda_min" >
                     </td>
                     <td>
-                        <input size="5" value="0.45" id="lambda_min_disp"> &Aring;
+                        <input size="5" value="0.7" id="lambda_min_disp"> &Aring;
+                    </td>
+                </tr>
+                <tr >
+                    <td>
+                        <b><i>Q</i><sub>max</sub></b><br />
+                    </td>
+                    <td>
+                        <input type="range" value="10" min="0" max="20" step="0.01" id="Q_max" >
+                    </td>
+                    <td>
+                        <input size="5" value="10" id="Q_max_disp"> &Aring;<sup>-1</sup>
                     </td>
                 </tr>
             </table>
