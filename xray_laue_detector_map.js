@@ -84,7 +84,8 @@ window.addEventListener('load', () => {
     });
 
     document.getElementById('RefCon').addEventListener('change', (evt) => {   
-        set_RefCon_and_draw();
+//        set_RefCon_and_draw();
+        draw();
     });
 
     document.getElementById('set_orientation_button').addEventListener('click', (evt) => {   
