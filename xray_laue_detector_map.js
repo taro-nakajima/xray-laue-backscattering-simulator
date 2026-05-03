@@ -2,9 +2,13 @@ import * as THREE from 'three';
 
 //JavaScript code for simulation of X-ray Laue backscattering
 
-const version = "1.2";
+const version = "1.3";
 
-// dimensions of the canvas object
+const scaleX_default=1200;
+const scaleY_default=400;
+
+
+// dimensions of the canvas object (global variables)
 let scaleX=1200;
 let scaleY=400;
 
@@ -18,10 +22,21 @@ let Y0_ofst=0;
 const radius=5;       // radius of circles showing refletions in the simulation.
 const radius_tgt=8;     //// radius of a circle showing a target refletions in the simulation.
 const txt_ofst1=radius+10;   //offset along Y direction for indices shown near each reflection.
-const fundamental_color="rgb(0, 0, 250)";
-const DetMapBGColor="rgb(220, 220, 220)";
-const gridcolor="rgb(250, 100, 0)"
 const ref_linewidth=1;
+
+//colorSet variables
+let fundamental_color="rgb(0, 0, 250)";
+let DetMapBGColor="rgb(220, 220, 220)";
+let gridcolor="rgb(250, 100, 0)";
+//colorSet1
+const fundamental_color1="rgb(0, 0, 250)";
+const DetMapBGColor1="rgb(220, 220, 220)";
+const gridcolor1="rgb(250, 100, 0)";
+//colorSet2
+const fundamental_color2="rgb(54, 250, 0)";
+const DetMapBGColor2="rgb(16, 5, 168)";
+const gridcolor2="rgb(250, 175, 0)";
+
 
 //variables for calculating Laue diffraction patterns.-------------------
 let u = new Array(3); // indices, pallarel to the incident beam
@@ -84,7 +99,6 @@ window.addEventListener('load', () => {
     });
 
     document.getElementById('RefCon').addEventListener('change', (evt) => {   
-//        set_RefCon_and_draw();
         draw();
     });
 
@@ -170,11 +184,6 @@ function draw() {
     lambda_adjust_and_draw();
     draw_OriViewer();
 
-}
-
-function set_RefCon_and_draw(){
-    set_ReflectionCondition();
-    draw_DetMap();
 }
 
 function rot_and_draw(rot_ax_dir) {
@@ -324,8 +333,41 @@ function check_ReflectionCondition(RefCon,H,K,L){
 function draw_DetMap(){
 
     let canvas = document.getElementById('CanvasDetMap');
+    if(imageLoaded==false){
+        if(document.getElementById('detShape_square').checked==true){
+            console.log("square");
+            scaleX=scaleY_default;
+            scaleY=scaleY_default;
+            X0=scaleY_default/2.0;
+            Y0=scaleY_default/2.0;            
+        }
+        else{
+            scaleX=scaleX_default;
+            scaleY=scaleY_default;
+            X0=scaleX_default/2.0;
+            Y0=scaleY_default/2.0;            
+        }
+    }
     canvas.width=scaleX;
     canvas.height=scaleY;
+
+    switch(document.getElementById('colorSet').value){
+        case 'colorSet1':
+            fundamental_color=fundamental_color1;
+            DetMapBGColor=DetMapBGColor1;
+            gridcolor=gridcolor1;
+            break;
+        case 'colorSet2':
+            fundamental_color=fundamental_color2;
+            DetMapBGColor=DetMapBGColor2;
+            gridcolor=gridcolor2;
+            break;
+        default:
+            fundamental_color=fundamental_color1;
+            DetMapBGColor=DetMapBGColor1;
+            gridcolor=gridcolor1;
+            break;
+    }
 
     let context = canvas.getContext('2d');
 

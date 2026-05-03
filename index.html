@@ -10,7 +10,7 @@
   gtag('config', 'G-E03R6BWS4W');
 </script>
 <title >X-ray Laue Backscattering Pattern Simulator</title>
-<link rel="stylesheet" type="text/css" href="./common.css">
+<link rel="stylesheet" type="text/css" href="./common.css?20260501">
 <script async src="https://unpkg.com/es-module-shims@1.5.8/dist/es-module-shims.js"></script>
 <script type="importmap">
     {
@@ -19,7 +19,7 @@
       }
     }
   </script>
-<script type="module" src="./xray_laue_detector_map.js?20250426"></script>
+<script type="module" src="./xray_laue_detector_map.js?20260502"></script>
 <meta charset="UTF-8">
 </head>
 <body>
@@ -163,6 +163,11 @@
                         Sample-detector distance <input size="5" id="Lsd" value="40"> mm.<br />
                         Vertical length of the detection area <input size="5" id="DetHeight" value="80"> mm.<br />
                         Offset of the center position (<input size="5" id="X0_ofst" value="0">,<input size="5" id="Y0_ofst" value="0">) pixels.<br />
+                        Det. shape : <input type="radio" id="detShape_wide" name="detShape" class="radio_bt_visible" checked><label for="detShape_wide">Wide</label> <input type="radio" id="detShape_square" name="detShape" class="radio_bt_visible"><label for="detShape_square">Square</label><br />
+                        Color : <select id="colorSet">
+                                    <option value="colorSet1">BG: gray, Spots: blue</option>
+                                    <option value="colorSet2">BG: blue, Spots: green</option>
+                                </select><br />
                         <input type="button" value="Set" id="set_origin_button"><br />
                     </td>
                     <td width="20"> 
